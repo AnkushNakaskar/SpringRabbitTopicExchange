@@ -26,7 +26,7 @@ public class RabbitMqConfig {
 
 	public static final String topicQueueIncluded = "included.topic.queue";
 	public static final String topicQueueIncluded1 = "included.topic.queue1";
-	public static final String topicQueueexcluded = "included.topic.queue2";
+	public static final String topicQueueIncluded2 = "included.topic.queue2";
 
 	@Bean
 	public ConnectionFactory rabbitConnectionFactory() {
@@ -58,7 +58,7 @@ public class RabbitMqConfig {
 
 	@Bean
 	public Queue topicQueue3() {
-		return new Queue(topicQueueexcluded, true);
+		return new Queue(topicQueueIncluded2, true);
 	}
 
 	@Bean
@@ -66,15 +66,7 @@ public class RabbitMqConfig {
 		return new TopicExchange("my-exchange", false, true);
 	}
 
-	// @Bean
-	// Binding binding() {
-	// return
-	// BindingBuilder.bind(topicQueue1()).to(exchange()).with("ru.interosite.*");
-	// }
-	@Bean("jsonMessageConverter")
-	public MessageConverter jsonMessageConverter() {
-		return new JsonMessageConverter();
-	}
+
 
 	@Bean
 	public Advice[] advices() {
@@ -91,19 +83,41 @@ public class RabbitMqConfig {
 
 	@Bean
 	List<Binding> bindings() {
-		return Arrays.asList(BindingBuilder.bind(topicQueue1()).to(exchange()).with("ru.interosite.*"),
-				BindingBuilder.bind(topicQueue2()).to(exchange()).with("ru.interosite.*"),
-				BindingBuilder.bind(topicQueue3()).to(exchange()).with("excluded.*"));
+		return Arrays.asList(BindingBuilder.bind(topicQueue1()).to(exchange()).with("ru.interosite.queue1"),BindingBuilder.bind(topicQueue1()).to(exchange()).with("ru.interosite.queue.*"),
+				BindingBuilder.bind(topicQueue2()).to(exchange()).with("ru.interosite.queue2"),BindingBuilder.bind(topicQueue2()).to(exchange()).with("ru.interosite.queue.*"),
+				BindingBuilder.bind(topicQueue3()).to(exchange()).with("ru.interosite.queue3"),BindingBuilder.bind(topicQueue3()).to(exchange()).with("ru.interosite.queue.*"));
 	}
 
 	@Bean
-	SimpleMessageListenerContainer container() {
+	SimpleMessageListenerContainer queue1Listener() {
 		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
 		container.setConnectionFactory(rabbitConnectionFactory());
-		container.setQueueNames(new String[] { topicQueueexcluded, topicQueueIncluded, topicQueueIncluded1 });
+		container.setQueueNames(new String[] { topicQueueIncluded });
 		container.setMessageListener(new Consumer());
 		container.setAdviceChain(advices());
-		container.setConcurrentConsumers(2);//two consumer(thread will listen at the same time to this queues).
+		container.setConcurrentConsumers(1);//two consumer(thread will listen at the same time to this queues).
+		return container;
+	}
+
+	@Bean
+	SimpleMessageListenerContainer queue2Listener() {
+		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+		container.setConnectionFactory(rabbitConnectionFactory());
+		container.setQueueNames(new String[] { topicQueueIncluded1 });
+		container.setMessageListener(new Consumer1());
+		container.setAdviceChain(advices());
+		container.setConcurrentConsumers(1);//two consumer(thread will listen at the same time to this queues).
+		return container;
+	}
+
+	@Bean
+	SimpleMessageListenerContainer queue3Listener() {
+		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+		container.setConnectionFactory(rabbitConnectionFactory());
+		container.setQueueNames(new String[] { topicQueueIncluded2});
+		container.setMessageListener(new Consumer2());
+		container.setAdviceChain(advices());
+		container.setConcurrentConsumers(1);//two consumer(thread will listen at the same time to this queues).
 		return container;
 	}
 

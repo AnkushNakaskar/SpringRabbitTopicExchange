@@ -20,13 +20,15 @@ public class Runner implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Thread.sleep(1000);
-		for (int i = 0; i < 100000; i++) {
+		for (int i = 0; i < 1; i++) {
 			System.out.println("Sending message...");
 //			System.out.println(
 //					".........No queue bound to exchange..hence message is discarded ....you can see exchange is different than queue name....");
 //			rabbitTemplate.convertAndSend("included","included","Hello from RabbitMQ!");
-			rabbitTemplate.convertAndSend("my-exchange", "ru.interosite.1", "ttt1233");//topic3 queue is excluded here because different routing key pattern 
+			rabbitTemplate.convertAndSend("my-exchange", "ru.interosite.queue1", "ttt1233");//sending to only queue1
+			rabbitTemplate.convertAndSend("my-exchange", "ru.interosite.queue2", "ttt1233");//sending to queue2
+			rabbitTemplate.convertAndSend("my-exchange", "ru.interosite.queue3", "ttt1233");//sending to queue3
+			rabbitTemplate.convertAndSend("my-exchange", "ru.interosite.queue.*", "ttt1233");//sending to all queue
 			
 		}
 	}
