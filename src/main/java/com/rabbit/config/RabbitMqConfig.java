@@ -83,9 +83,9 @@ public class RabbitMqConfig {
 
 	@Bean
 	List<Binding> bindings() {
-		return Arrays.asList(BindingBuilder.bind(topicQueue1()).to(exchange()).with("ru.interosite.queue1"),BindingBuilder.bind(topicQueue1()).to(exchange()).with("ru.interosite.queue.*"),
-				BindingBuilder.bind(topicQueue2()).to(exchange()).with("ru.interosite.queue2"),BindingBuilder.bind(topicQueue2()).to(exchange()).with("ru.interosite.queue.*"),
-				BindingBuilder.bind(topicQueue3()).to(exchange()).with("ru.interosite.queue3"),BindingBuilder.bind(topicQueue3()).to(exchange()).with("ru.interosite.queue.*"));
+		return Arrays.asList(BindingBuilder.bind(topicQueue1()).to(exchange()).with("ru.interosite.queue1"),BindingBuilder.bind(topicQueue1()).to(exchange()).with("ru.interosite.common.all"),
+				BindingBuilder.bind(topicQueue2()).to(exchange()).with("ru.interosite.queue2"),BindingBuilder.bind(topicQueue2()).to(exchange()).with("ru.interosite.common.all"),
+				BindingBuilder.bind(topicQueue3()).to(exchange()).with("ru.interosite.queue3"),BindingBuilder.bind(topicQueue3()).to(exchange()).with("ru.interosite.common.all"));
 	}
 
 	@Bean

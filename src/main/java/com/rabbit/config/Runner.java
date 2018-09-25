@@ -28,7 +28,7 @@ public class Runner implements CommandLineRunner {
 			rabbitTemplate.convertAndSend("my-exchange", "ru.interosite.queue1", "ttt1233");//sending to only queue1
 			rabbitTemplate.convertAndSend("my-exchange", "ru.interosite.queue2", "ttt1233");//sending to queue2
 			rabbitTemplate.convertAndSend("my-exchange", "ru.interosite.queue3", "ttt1233");//sending to queue3
-			rabbitTemplate.convertAndSend("my-exchange", "ru.interosite.queue.*", "ttt1233");//sending to all queue
+			rabbitTemplate.convertAndSend("my-exchange", "ru.interosite.common.all", "ttt1233");//sending to all queue
 			
 		}
 	}
